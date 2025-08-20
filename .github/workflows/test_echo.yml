@@ -1,0 +1,12 @@
+name: Echo Org Variable
+
+on:
+  workflow_dispatch:  # Allows manual trigger
+  push:              # Runs on every push to repo
+
+jobs:
+  echo-org-variable:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print organization variable
+        run: echo "The value of MY_ORG_VAR is ${{ vars.TESTFLAG }}"
