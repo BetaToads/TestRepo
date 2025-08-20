@@ -1,19 +1,30 @@
-name: Deploy Guard
+name: Deploy Guard Workflow
 on:
   workflow_call:
+    outputs:
+      allow:
+        description: "Whether deploy is allowed."
+        value: ${{ jobs.check_guard.outputs.allow }}
 
 jobs:
-  guard:
+  check_guard:
     runs-on: ubuntu-latest
     outputs:
-      allow: ${{ steps.check.outputs.allow }}
+      allow: ${{ steps.guard.outputs.allow }}
     steps:
-      - id: check
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Check ALLOW_DEPLOY variable
+        id: guard
+        shell: bash
         run: |
-          if [ "${{ vars.ALLOW_DEPLOY }}" = "True" ]; then
-            echo "✅ Deploys allowed"
+          value="${{ vars.ALLOW_DEPLOY }}"
+          value_lower=$(echo "$value" | tr '[:upper:]' '[:lower:]')
+
+          if [ "$value_lower" = "true" ]; then
             echo "allow=true" >> $GITHUB_OUTPUT
+            echo "✅ Deploy allowed"
           else
-            echo "🚨 Deploys are currently disabled by org variable."
             echo "allow=false" >> $GITHUB_OUTPUT
-          fi
+            echo "🚨 Deploys disabled by org variable"
