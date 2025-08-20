@@ -5,27 +5,21 @@ on:
     outputs:
       allow:
         description: "Whether deploy is allowed."
-        value: ${{ jobs.check_guard.outputs.allow }}
+        value: ${{ steps.check.outputs.allow }}
 
 jobs:
   check_guard:
     runs-on: ubuntu-latest
     outputs:
-      allow: ${{ steps.guard.outputs.allow }}
+      allow: ${{ steps.check.outputs.allow }}
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Check ALLOW_DEPLOY variable
-        id: guard
-        shell: bash
+      - id: check
         run: |
           value="${{ vars.ALLOW_DEPLOY }}"
           value_lower=$(echo "$value" | tr '[:upper:]' '[:lower:]')
 
           if [ "$value_lower" = "true" ]; then
             echo "allow=true" >> $GITHUB_OUTPUT
-            echo "✅ Deploy allowed"
           else
             echo "allow=false" >> $GITHUB_OUTPUT
-            echo "🚨 Deploys disabled by org variable"
+          fi
