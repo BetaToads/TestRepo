@@ -6,7 +6,7 @@ on:
 
 jobs:
   guard:
-    uses: ./.github/workflows/deploy-guard.yml
+    uses: BetaToads/TestRepo/.github/workflows/deploy-guard.yml
   echo-org-variable:
     runs-on: ubuntu-latest
     steps:
