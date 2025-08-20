@@ -6,7 +6,7 @@ on:
 
 jobs:
   guard:
-    uses: ./.github/workflows/deploy_guard.yml  # Call reusable workflow
+    uses: BetaToads/TestRepo/.github/workflows/deploy_guard.yml
 
   echo-org-variable:
     runs-on: ubuntu-latest
