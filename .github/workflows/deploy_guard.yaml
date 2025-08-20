@@ -1,0 +1,19 @@
+name: Deploy Guard
+on:
+  workflow_call:
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    outputs:
+      allow: ${{ steps.check.outputs.allow }}
+    steps:
+      - id: check
+        run: |
+          if [ "${{ vars.ALLOW_DEPLOY }}" = "True" ]; then
+            echo "✅ Deploys allowed"
+            echo "allow=true" >> $GITHUB_OUTPUT
+          else
+            echo "🚨 Deploys are currently disabled by org variable."
+            echo "allow=false" >> $GITHUB_OUTPUT
+          fi

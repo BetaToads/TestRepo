@@ -5,6 +5,8 @@ on:
   push:              # Runs on every push to repo
 
 jobs:
+  guard:
+    uses: ./.github/workflows/deploy-guard.yml
   echo-org-variable:
     runs-on: ubuntu-latest
     steps:
